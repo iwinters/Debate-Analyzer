@@ -9,7 +9,7 @@ def create_quote_dict():
     if 'quotes' not in globals():
         quotes = {}
     most_recent_speaker = ""
-    with open("test transcript.txt","r", encoding="utf8") as transcript:
+    with open("october dem debate transcript.txt","r", encoding="utf8") as transcript:
         for line in transcript:
             cleaned_line = line.rstrip()
             if cleaned_line == "":
@@ -33,16 +33,23 @@ create_quote_dict()
 
 import re 
 
+def create_vocab_dict():
+    global vocab_dict
+    if 'vocab_dict' not in globals():
+        vocab_dict = {}
+    for q in quotes:
+        candidate_vocab = []
+        vocab_key = str(q)
+        candidate_paras = quotes.get(q)
+        for para in candidate_paras:
+            res = re.findall(r'\w+', para)
+            for word in res:
+                if str(word) not in candidate_vocab:
+                    candidate_vocab.append(word)
+        vocab_dict[vocab_key] = candidate_vocab
 
-sanders_word_list = []
-warren_word_list = []
+create_vocab_dict()
 
-for q in quotes:
-    speaker_strings = quotes.get(q)
-    for string in speaker_strings:
-        res = re.findall(r'\w+', string)
-        for word in res:
-            if str(word) not in sanders_word_list:
-                sanders_word_list.append(word)
-
-print(sanders_word_list)
+for x in vocab_dict:
+    printable = str(x) + ":" + str(len(vocab_dict[x]))
+    print(printable)
